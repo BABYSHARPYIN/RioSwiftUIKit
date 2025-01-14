@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    public init(hex: String)  {
+    public init(hex: String) {
         let hex = hex.trimmingCharacters(
             in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
