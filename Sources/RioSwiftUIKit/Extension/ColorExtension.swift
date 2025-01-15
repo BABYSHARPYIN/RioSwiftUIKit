@@ -41,7 +41,6 @@ extension Color {
             opacity: Double(a) / 255
         )
     }
-
     public static func random() -> Color {
         let red = CGFloat.random(in: 0...1)
         let green = CGFloat.random(in: 0...1)
