@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  AmbilightStyle.swift
 //  RioSwiftUIKit
 //
 //  Created by Rio on 2025/1/17.
@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct AmbilightStyle: View {
+struct AmbilightStyleModifier<S: Shape>: ViewModifier {
+    var contentShape: S
     var colors: [Color]?
     var blur: CGFloat?
     var animate: Bool?
     var animateDuration: CGFloat?
-    @State var colorRotation: CGFloat?
-    var body: some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
-            .fill(.thickMaterial)
-            .frame(width: 200, height: 100)
+    @State private var colorRotation: CGFloat = 0
+
+    func body(content: Content) -> some View {
+        content
             .overlay {
                 AngularGradient(
                     colors: colors ?? [
@@ -42,15 +42,17 @@ struct AmbilightStyle: View {
                         Color(hex: "29b0f7"),
                         Color(hex: "0ebeff"),
                     ], center: .center,
-                    angle: .degrees(colorRotation ?? 90.0)
+                    angle: .degrees(colorRotation)
                 )
                 .blur(radius: blur ?? 20)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .clipShape(
+                    contentShape
+                )
             }
             .onAppear {
                 if animate ?? false {
                     withAnimation(
-                        .linear(duration: animateDuration ?? 10.0)
+                        .linear(duration: animateDuration ?? 10)
                             .repeatForever(autoreverses: false)
                     ) {
                         colorRotation = 360
@@ -60,6 +62,46 @@ struct AmbilightStyle: View {
     }
 }
 
+extension View {
+    /// 添加环形光效果
+    /// - Parameters:
+    ///   - contentShape: 光效形状
+    ///   - colors: 自定义颜色数组（可选）
+    ///   - blur: 模糊程度（可选）
+    ///   - animate: 是否开启动画（可选）
+    ///   - animateDuration: 动画周期（可选）
+    /// - Returns: 修改后的视图
+    public func ambilightStyle<S: Shape>(
+        contentShape: S,
+        colors: [Color]? = nil,
+        blur: CGFloat? = nil,
+        animate: Bool? = nil,
+        animateDuration: CGFloat? = nil
+    ) -> some View {
+        modifier(
+            AmbilightStyleModifier(
+                contentShape: contentShape,
+                colors: colors,
+                blur: blur,
+                animate: animate,
+                animateDuration: animateDuration
+            )
+        )
+    }
+}
+
+struct AmbilightStyle: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 20, style: .continuous)
+            .fill(.thickMaterial)
+            .frame(width: 200, height: 100)
+            .ambilightStyle(
+                contentShape: RoundedRectangle(cornerRadius: 20).stroke(lineWidth: 10),
+                animate: true
+            )
+    }
+}
+
 #Preview {
-    AmbilightStyle(animate: false)
+    AmbilightStyle()
 }
