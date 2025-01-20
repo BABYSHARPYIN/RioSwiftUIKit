@@ -13,8 +13,7 @@ struct AmbilightStyleModifier<S: Shape>: ViewModifier {
     var blur: CGFloat?
     var animate: Bool?
     var animateDuration: CGFloat?
-    @State private var colorRotation: CGFloat = 0
-
+    @State var colorRotation: CGFloat?
     func body(content: Content) -> some View {
         content
             .overlay {
@@ -42,9 +41,9 @@ struct AmbilightStyleModifier<S: Shape>: ViewModifier {
                         Color(hex: "29b0f7"),
                         Color(hex: "0ebeff"),
                     ], center: .center,
-                    angle: .degrees(colorRotation)
+                    angle: .degrees(colorRotation ?? 90)
                 )
-                .blur(radius: blur ?? 20)
+                .blur(radius: blur ?? 40)
                 .clipShape(
                     contentShape
                 )
@@ -55,7 +54,8 @@ struct AmbilightStyleModifier<S: Shape>: ViewModifier {
                         .linear(duration: animateDuration ?? 10)
                             .repeatForever(autoreverses: false)
                     ) {
-                        colorRotation = 360
+                        let tmp:CGFloat = colorRotation ?? 90
+                        colorRotation = tmp+360
                     }
                 }
             }
@@ -76,7 +76,8 @@ extension View {
         colors: [Color]? = nil,
         blur: CGFloat? = nil,
         animate: Bool? = nil,
-        animateDuration: CGFloat? = nil
+        animateDuration: CGFloat? = nil,
+        colorRotation:CGFloat? = nil
     ) -> some View {
         modifier(
             AmbilightStyleModifier(
@@ -84,7 +85,8 @@ extension View {
                 colors: colors,
                 blur: blur,
                 animate: animate,
-                animateDuration: animateDuration
+                animateDuration: animateDuration,
+                colorRotation: colorRotation
             )
         )
     }
@@ -96,7 +98,8 @@ struct AmbilightStyle: View {
             .fill(.thickMaterial)
             .frame(width: 200, height: 100)
             .ambilightStyle(
-                contentShape: RoundedRectangle(cornerRadius: 20).stroke(lineWidth: 10),
+                contentShape: RoundedRectangle(cornerRadius: 20),
+                blur: 40,
                 animate: true
             )
     }
