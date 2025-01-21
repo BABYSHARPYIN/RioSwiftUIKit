@@ -24,15 +24,15 @@ struct LightStrokeStyle: View {
     LightStrokeStyle()
 }
 
-public struct lightStrokeModifier<S: Shape>: ViewModifier {
+public struct LightStrokeModifier<S: Shape>: ViewModifier {
     var contentShape: S
     var strokeLineWidth: CGFloat
     var gradientColors: [Color]
     var startPoint: UnitPoint
     var endPoint: UnitPoint
 
-    @usableFromInline
-    internal init(
+    
+    public init(
         contentShape: S,
         strokeLineWidth: CGFloat = 1,
         gradientColors: [Color] = [.white.opacity(0.4), .clear, .clear, .clear, .black.opacity(0.4)],
@@ -56,24 +56,5 @@ public struct lightStrokeModifier<S: Shape>: ViewModifier {
                             colors: gradientColors, startPoint: .topLeading,
                             endPoint: .bottomTrailing))
             }
-    }
-}
-
-public extension View {
-    @inlinable
-    func lightStroke<S: Shape>(
-        contentShape: S,
-        strokeLineWidth: CGFloat = 1.0,
-        gradientColors: [Color] = [
-            .white.opacity(0.4), .clear, .clear, .clear, .black.opacity(0.4),
-        ],
-        startPoint: UnitPoint = .topLeading,
-        endPoint: UnitPoint = .bottomTrailing
-    ) -> some View {
-        modifier(
-            lightStrokeModifier(
-                contentShape: contentShape, strokeLineWidth: strokeLineWidth,
-                gradientColors: gradientColors, startPoint: startPoint,
-                endPoint: endPoint))
     }
 }

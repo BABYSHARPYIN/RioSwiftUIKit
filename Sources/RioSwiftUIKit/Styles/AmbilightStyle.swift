@@ -7,14 +7,23 @@
 
 import SwiftUI
 
-struct AmbilightStyleModifier<S: Shape>: ViewModifier {
+public struct AmbilightStyleModifier<S: Shape>: ViewModifier {
     var contentShape: S
     var colors: [Color]?
     var blur: CGFloat?
     var animate: Bool?
     var animateDuration: CGFloat?
     @State var colorRotation: CGFloat?
-    func body(content: Content) -> some View {
+    
+    public init(contentShape: S, colors: [Color]? = nil, blur: CGFloat? = nil, animate: Bool? = nil, animateDuration: CGFloat? = nil, colorRotation: CGFloat? = nil) {
+        self.contentShape = contentShape
+        self.colors = colors
+        self.blur = blur
+        self.animate = animate
+        self.animateDuration = animateDuration
+        self.colorRotation = colorRotation
+    }
+    public func body(content: Content) -> some View {
         content
             .overlay {
                 AngularGradient(
@@ -62,35 +71,6 @@ struct AmbilightStyleModifier<S: Shape>: ViewModifier {
     }
 }
 
-extension View {
-    /// 添加环形光效果
-    /// - Parameters:
-    ///   - contentShape: 光效形状
-    ///   - colors: 自定义颜色数组（可选）
-    ///   - blur: 模糊程度（可选）
-    ///   - animate: 是否开启动画（可选）
-    ///   - animateDuration: 动画周期（可选）
-    /// - Returns: 修改后的视图
-    public func ambilightStyle<S: Shape>(
-        contentShape: S,
-        colors: [Color]? = nil,
-        blur: CGFloat? = nil,
-        animate: Bool? = nil,
-        animateDuration: CGFloat? = nil,
-        colorRotation:CGFloat? = nil
-    ) -> some View {
-        modifier(
-            AmbilightStyleModifier(
-                contentShape: contentShape,
-                colors: colors,
-                blur: blur,
-                animate: animate,
-                animateDuration: animateDuration,
-                colorRotation: colorRotation
-            )
-        )
-    }
-}
 
 struct AmbilightStyle: View {
     var body: some View {

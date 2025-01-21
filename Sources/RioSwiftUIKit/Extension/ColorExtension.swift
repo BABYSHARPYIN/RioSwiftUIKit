@@ -9,6 +9,11 @@ import Foundation
 import SwiftUI
 
 extension Color {
+    /// 使用十六进制字符串创建颜色
+    /// - Parameter hex: 十六进制颜色字符串，支持以下格式：
+    ///   - RGB: 3位十六进制值 (例如: "FFF")
+    ///   - RGB: 6位十六进制值 (例如: "FFFFFF")
+    ///   - ARGB: 8位十六进制值 (例如: "FFFFFFFF")
     public init(hex: String) {
         let hex = hex.trimmingCharacters(
             in: CharacterSet.alphanumerics.inverted)
@@ -41,6 +46,9 @@ extension Color {
             opacity: Double(a) / 255
         )
     }
+
+    /// 生成随机颜色
+    /// - Returns: 具有随机 RGB 值的颜色
     public static func random() -> Color {
         let red = CGFloat.random(in: 0...1)
         let green = CGFloat.random(in: 0...1)
