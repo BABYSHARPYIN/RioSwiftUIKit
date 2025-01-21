@@ -14,28 +14,6 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    var body: some View {
-        BreakStyleView(offsetLevel: 10) {
-            Text("Rio")
-                .font(.system(size: 44, weight: .bold, design: .monospaced))
-                .frame(maxWidth: .infinity)
-        }
-        //        BreakStyleView{
-        //            Image(systemName: "trash.fill")
-        //                .resizable()
-        //                .scaledToFit()
-        //                .frame(width: 100)
-        //        }
-        //        BreakStyleView{
-        //            Image("image")
-        //                .resizable()
-        //                .scaledToFit()
-        //                .frame(width: 100)
-        //        }
-    }
-}
-
 public struct BreakStyleView<Content: View>: View {
 
     let content: () -> Content
@@ -101,7 +79,6 @@ public struct BreakStyleView<Content: View>: View {
             }
 
         }
-
         .background {
             GeometryReader {
                 geo in
@@ -131,5 +108,9 @@ public struct BreakStyleView<Content: View>: View {
 }
 
 #Preview {
-    ContentView()
+    BreakStyleView(offsetLevel: 10) {
+        Text("Rio")
+            .font(.system(size: 44, weight: .bold, design: .monospaced))
+            .frame(maxWidth: .infinity)
+    }
 }
