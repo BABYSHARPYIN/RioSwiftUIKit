@@ -14,8 +14,12 @@ public struct AmbilightStyleModifier<S: Shape>: ViewModifier {
     var animate: Bool?
     var animateDuration: CGFloat?
     @State var colorRotation: CGFloat?
-    
-    public init(contentShape: S, colors: [Color]? = nil, blur: CGFloat? = nil, animate: Bool? = nil, animateDuration: CGFloat? = nil, colorRotation: CGFloat? = nil) {
+
+    public init(
+        contentShape: S, colors: [Color]? = nil, blur: CGFloat? = nil,
+        animate: Bool? = nil, animateDuration: CGFloat? = nil,
+        colorRotation: CGFloat? = nil
+    ) {
         self.contentShape = contentShape
         self.colors = colors
         self.blur = blur
@@ -63,14 +67,13 @@ public struct AmbilightStyleModifier<S: Shape>: ViewModifier {
                         .linear(duration: animateDuration ?? 10)
                             .repeatForever(autoreverses: false)
                     ) {
-                        let tmp:CGFloat = colorRotation ?? 90
-                        colorRotation = tmp+360
+                        let tmp: CGFloat = colorRotation ?? 90
+                        colorRotation = tmp + 360
                     }
                 }
             }
     }
 }
-
 
 struct AmbilightStyle: View {
     var body: some View {
@@ -78,7 +81,8 @@ struct AmbilightStyle: View {
             .fill(.thickMaterial)
             .frame(width: 200, height: 100)
             .ambilightStyle(
-                contentShape: RoundedRectangle(cornerRadius: 20),
+                contentShape: RoundedRectangle(
+                    cornerRadius: 20, style: .continuous),
                 blur: 40,
                 animate: true
             )

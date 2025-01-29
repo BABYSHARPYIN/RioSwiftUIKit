@@ -108,7 +108,7 @@ public struct BreakStyleView<Content: View>: View {
 }
 
 #Preview {
-    BreakStyleView(offsetLevel: 10) {
+    BreakStyleView(offsetLevel: 5) {
         Text("Rio")
             .font(.system(size: 44, weight: .bold, design: .monospaced))
             .frame(maxWidth: .infinity)

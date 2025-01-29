@@ -21,7 +21,16 @@ struct RadialLayout: Layout {
         subviews: Subviews,
         cache: inout ()
     ) {
+        //确保有子视图
         guard !subviews.isEmpty else { return }
+
+        //如果只有一个元素则防止在最中间
+        if subviews.count == 1 {
+            subviews.first?.place(
+                at: CGPoint(x: bounds.midX, y: bounds.midY), anchor: .center,
+                proposal: .unspecified)
+            return
+        }
 
         // 计算半径为可用区域的一半（使子视图位于边界）
         let radius = min(bounds.width, bounds.height) / 2.0
@@ -65,14 +74,24 @@ struct RadialLayout: Layout {
     }
 }
 
-#Preview {
-    RadialLayout {
-        ForEach(0..<10,id:\.self) { i in
-            Text("\(i)").background {
-//                Color.random()
+struct Demo:View {
+    @State var count:Int = 12
+    var body: some View{
+        RadialLayout {
+            ForEach(0..<count, id: \.self) { i in
+                Text("\(i)")
+            }
+        }
+        .frame(width: 300, height: 300)
+        .border(.black)
+        .onTapGesture {
+            withAnimation {
+                count+=1
             }
         }
     }
-    .frame(width: 300, height: 300)
-    .border(.black)
+}
+
+#Preview{
+    Demo()
 }

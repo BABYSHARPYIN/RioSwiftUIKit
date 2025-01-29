@@ -10,6 +10,17 @@ import SwiftUI
 
 extension View {
     /// 创建一个反向遮罩效果，将遮罩视图的非透明部分变为透明
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Color.blue
+    ///     .frame(width: 200, height: 200)
+    ///     .reverseMask {
+    ///         Circle()
+    ///             .frame(width: 100, height: 100)
+    ///     }
+    /// ```
+    ///
     /// - Parameters:
     ///   - alignment: 遮罩对齐方式
     ///   - mask: 用作遮罩的视图构建器
@@ -28,6 +39,18 @@ extension View {
     }
 
     /// 为视图添加光效描边
+    ///
+    /// Example usage:
+    /// ```swift
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .frame(width: 200, height: 100)
+    ///     .lightStroke(
+    ///         contentShape: RoundedRectangle(cornerRadius: 12),
+    ///         strokeLineWidth: 2,
+    ///         gradientColors: [.white, .clear, .white]
+    ///     )
+    /// ```
+    ///
     /// - Parameters:
     ///   - contentShape: 描边的形状
     ///   - strokeLineWidth: 描边宽度
@@ -53,6 +76,21 @@ extension View {
     }
 
     /// 添加环形光效果
+    ///
+    /// Example usage:
+    /// ```swift
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .fill(.blue)
+    ///     .frame(width: 200, height: 100)
+    ///     .ambilightStyle(
+    ///         contentShape: RoundedRectangle(cornerRadius: 12),
+    ///         colors: [.red, .blue, .green],
+    ///         blur: 20,
+    ///         animate: true,
+    ///         animateDuration: 2
+    ///     )
+    /// ```
+    ///
     /// - Parameters:
     ///   - contentShape: 光效形状
     ///   - colors: 自定义颜色数组（可选）
@@ -82,6 +120,15 @@ extension View {
     }
 
     /// 添加抖动效果
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Text("Shake me!")
+    ///     .onShake(amplitude: 5) {
+    ///         print("View was shaken!")
+    ///     }
+    /// ```
+    ///
     /// - Parameters:
     ///   - amplitude: 抖动幅度
     ///   - anchor: 抖动锚点
@@ -89,11 +136,59 @@ extension View {
     /// - Returns: 添加了抖动效果的视图
     @inlinable
     public func onShake(
-        amplitude: CGFloat? = nil, anchor: UnitPoint? = nil,
+        amplitude: CGFloat? = nil,
+        anchor: UnitPoint? = nil,
         action: @escaping () -> Void
     ) -> some View {
         modifier(
             OnShakeModifier(
-                amplitude: amplitude, anchor: anchor, action: action))
+                amplitude: amplitude,
+                anchor: anchor,
+                action: action
+            )
+        )
+    }
+
+    /// 为视图添加光泽扫过动画效果
+    ///
+    /// 此修饰符创建一个从左到右扫过的光泽动画效果，类似于加载或强调状态的视觉反馈。
+    /// 光泽效果会按照指定的形状进行裁剪，并可以通过 animate 参数控制开启或关闭。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .fill(.blue)
+    ///     .frame(width: 200, height: 100)
+    ///     .shimmer(contentShape: RoundedRectangle(cornerRadius: 12))
+    /// ```
+    ///
+    /// 或者控制动画状态:
+    /// ```swift
+    /// @State private var isShimmering = true
+    ///
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .fill(.blue)
+    ///     .frame(width: 200, height: 100)
+    ///     .shimmer(
+    ///         contentShape: RoundedRectangle(cornerRadius: 12),
+    ///         animate: isShimmering
+    ///     )
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - contentShape: 定义光泽效果的形状。该形状将被用作裁剪遮罩
+    ///   - animate: 控制动画是否激活。默认为 true
+    /// - Returns: 应用了光泽效果的修改后的视图
+    @inlinable
+    public func shimmer<S: Shape>(
+        contentShape: S,
+        animate: Bool = true
+    ) -> some View {
+        modifier(
+            ShimmerModifier(
+                contentShape: contentShape,
+                animate: animate
+            )
+        )
     }
 }

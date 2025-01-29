@@ -7,23 +7,6 @@
 
 import SwiftUI
 
-struct LightStrokeStyle: View {
-    var body: some View {
-        ZStack {
-            Color.secondary
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.tint)
-                .frame(width: 100, height: 100)
-                .lightStroke(contentShape: RoundedRectangle(cornerRadius: 10))
-                .rotationEffect(.degrees(45))
-            
-        }.ignoresSafeArea()
-    }
-}
-#Preview {
-    LightStrokeStyle()
-}
-
 public struct LightStrokeModifier<S: Shape>: ViewModifier {
     var contentShape: S
     var strokeLineWidth: CGFloat
@@ -31,11 +14,12 @@ public struct LightStrokeModifier<S: Shape>: ViewModifier {
     var startPoint: UnitPoint
     var endPoint: UnitPoint
 
-    
     public init(
         contentShape: S,
         strokeLineWidth: CGFloat = 1,
-        gradientColors: [Color] = [.white.opacity(0.4), .clear, .clear, .clear, .black.opacity(0.4)],
+        gradientColors: [Color] = [
+            .white.opacity(0.4), .clear, .clear, .clear, .black.opacity(0.4),
+        ],
         startPoint: UnitPoint = .topLeading,
         endPoint: UnitPoint = .bottomTrailing
     ) {
@@ -45,7 +29,7 @@ public struct LightStrokeModifier<S: Shape>: ViewModifier {
         self.startPoint = startPoint
         self.endPoint = endPoint
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .overlay {
@@ -57,4 +41,22 @@ public struct LightStrokeModifier<S: Shape>: ViewModifier {
                             endPoint: .bottomTrailing))
             }
     }
+}
+
+struct LightStrokeStyle: View {
+    var body: some View {
+        ZStack {
+            Color.secondary
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.tint)
+                .frame(width: 100, height: 100)
+                .lightStroke(contentShape: RoundedRectangle(cornerRadius: 10))
+                .rotationEffect(.degrees(45))
+
+        }.ignoresSafeArea()
+    }
+}
+
+#Preview {
+    LightStrokeStyle()
 }
