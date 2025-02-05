@@ -177,17 +177,20 @@ extension View {
     ///
     /// - Parameters:
     ///   - contentShape: 定义光泽效果的形状。该形状将被用作裁剪遮罩
-    ///   - animate: 控制动画是否激活。默认为 true
+    ///   - animate: 控制动画是否激活,默认为 true
+    ///   - color: 光泽颜色,默认为白色
     /// - Returns: 应用了光泽效果的修改后的视图
     @inlinable
     public func shimmer<S: Shape>(
         contentShape: S,
-        animate: Bool = true
+        animate: Bool = true,
+        color:Color = Color.white
     ) -> some View {
         modifier(
             ShimmerModifier(
                 contentShape: contentShape,
-                animate: animate
+                animate: animate,
+                color: color
             )
         )
     }

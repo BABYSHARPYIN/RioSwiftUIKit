@@ -10,11 +10,13 @@ import SwiftUI
 public struct ShimmerModifier<S: Shape>: ViewModifier {
     var contentShape: S
     var animate: Bool
+    var color: Color
     @State private var offset: CGFloat = .infinity
 
-    public init(contentShape: S, animate: Bool) {
+    public init(contentShape: S, animate: Bool, color: Color) {
         self.contentShape = contentShape
         self.animate = animate
+        self.color = color
     }
 
     public func body(content: Content) -> some View {
@@ -27,19 +29,21 @@ public struct ShimmerModifier<S: Shape>: ViewModifier {
                         LinearGradient(
                             colors: [
                                 .clear,
-                                .white.opacity(0.1),
-                                .white.opacity(0.3),
-                                .white.opacity(0.1),
+                                .clear,
+                                color.opacity(0.1),
+                                color.opacity(0.2),
+                                color.opacity(0.1),
+                                .clear,
                                 .clear,
                             ],
-                            startPoint: .leading, endPoint: .trailing
+                            startPoint: .topLeading, endPoint: .bottomTrailing
                         )
                         .blur(radius: 5)
                         .offset(x: offset)
                         .onAppear {
                             offset = -size.width
                             withAnimation(
-                                .linear(duration: 1.25).delay(1.25)
+                                .linear(duration: 1.25).delay(2.0)
                                     .repeatForever(
                                         autoreverses: false)
                             ) {
@@ -64,7 +68,11 @@ struct ShimmerStyle: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.gray)
                     .frame(height: 50)
-                    .shimmer(contentShape: RoundedRectangle(cornerRadius: 10), animate: isLoading)
+                    .shimmer(
+                        contentShape: RoundedRectangle(cornerRadius: 10),
+                        animate: isLoading,
+                        color: .white
+                    )
                     .onTapGesture {
                         isLoading.toggle()
                     }
