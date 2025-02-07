@@ -8,19 +8,22 @@ import Foundation
 import SwiftUI
 
 public struct OnShakeModifier: ViewModifier {
-    
+
     @State private var degress: CGFloat
-    var amplitude:CGFloat?
-    var anchor:UnitPoint?
-    var action:() -> Void
-    
-    public init(amplitude: CGFloat? = nil, anchor: UnitPoint? = nil, action: @escaping () -> Void) {
+    var amplitude: CGFloat?
+    var anchor: UnitPoint?
+    var action: () -> Void
+
+    public init(
+        amplitude: CGFloat? = nil, anchor: UnitPoint? = nil,
+        action: @escaping () -> Void
+    ) {
         self.degress = 0
         self.amplitude = amplitude
         self.anchor = anchor
         self.action = action
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .rotationEffect(.degrees(degress), anchor: anchor ?? .top)
@@ -39,9 +42,8 @@ public struct OnShakeModifier: ViewModifier {
     }
 }
 
-
 struct OnShakeModifierView: View {
-    @State var symbolVariant:SymbolVariants = .none
+    @State var symbolVariant: SymbolVariants = .none
     var body: some View {
         Image(systemName: "bell")
             .resizable()
@@ -49,16 +51,14 @@ struct OnShakeModifierView: View {
             .frame(width: 50, height: 50)
             .foregroundStyle(.yellow)
             .symbolVariant(symbolVariant)
-            .onShake(amplitude: 20,anchor:.top) {
+            .onShake(amplitude: 20, anchor: .top) {
                 print("shaking")
                 if symbolVariant == .none {
                     symbolVariant = .fill
-                }else{
+                } else {
                     symbolVariant = .none
                 }
-                
             }
-            
     }
 }
 

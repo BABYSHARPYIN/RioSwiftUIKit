@@ -184,13 +184,94 @@ extension View {
     public func shimmer<S: Shape>(
         contentShape: S,
         animate: Bool = true,
-        color:Color = Color.white
+        color: Color = Color.white
     ) -> some View {
         modifier(
             ShimmerModifier(
                 contentShape: contentShape,
                 animate: animate,
                 color: color
+            )
+        )
+    }
+
+    /// 为视图添加加载状态和加载指示器
+    ///
+    /// 使用默认加载指示器样式，可自定义加载文本。当加载状态激活时，会显示一个半透明遮罩层和加载指示器，
+    /// 并在后台执行指定的异步任务。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Button("Load Data") {
+    ///     isLoading = true
+    /// }
+    /// .onLoading(isLoading: isLoading, loadingText: "加载中...") {
+    ///     await loadDataTask()
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - isLoading: 控制加载状态的布尔值
+    ///   - loadingText: 加载过程中显示的文本，默认为 "Loading..."
+    ///   - task: 在加载状态下执行的异步任务
+    /// - Returns: 添加了加载效果的修改后的视图
+    @inlinable
+    public func onLoading(
+        isLoading: Bool,
+        loadingText: String = "Loading...",
+        perform task: @escaping () async -> Void
+    ) -> some View {
+        modifier(
+            OnLoadingModifier(
+                isLoading: isLoading,
+                loadingText: loadingText,
+                task: task,
+                loadingView: nil
+            )
+        )
+    }
+
+    /// 为视图添加加载状态和自定义加载指示器
+    ///
+    /// 允许使用自定义视图作为加载指示器。当加载状态激活时，会显示一个半透明遮罩层和自定义的加载视图，
+    /// 并在后台执行指定的异步任务。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Button("Load Data") {
+    ///     isLoading = true
+    /// }
+    /// .onLoading(isLoading: isLoading) {
+    ///     // 自定义加载视图
+    ///     VStack {
+    ///         Image(systemName: "arrow.triangle.2.circlepath")
+    ///             .font(.largeTitle)
+    ///         Text("Processing...")
+    ///     }
+    /// } perform: {
+    ///     await loadDataTask()
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - isLoading: 控制加载状态的布尔值
+    ///   - loadingView: 自定义加载视图的视图构建器
+    ///   - task: 在加载状态下执行的异步任务
+    /// - Returns: 添加了自定义加载效果的修改后的视图
+    @inlinable
+    public func onLoading<LoadingView: View>(
+        isLoading: Bool,
+        @ViewBuilder loadingView: @escaping () -> LoadingView,
+        perform task: @escaping () async -> Void
+    ) -> some View {
+        modifier(
+            OnLoadingModifier(
+                isLoading: isLoading,
+                loadingText: "",
+                task: task,
+                loadingView: {
+                    AnyView(loadingView())
+                }
             )
         )
     }
