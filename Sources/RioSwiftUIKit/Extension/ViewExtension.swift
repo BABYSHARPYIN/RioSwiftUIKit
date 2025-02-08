@@ -395,4 +395,33 @@ extension View {
         }
         return bubbles(configs)
     }
+    
+    /// 添加破损风格效果
+    ///
+    /// 为视图添加故障艺术风格的视觉效果，包括色差和随机故障块。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// // 基本用法
+    /// Text("Glitch Text")
+    ///     .breakStyle()
+    ///
+    /// // 自定义偏移级别
+    /// Image(systemName: "star.fill")
+    ///     .font(.largeTitle)
+    ///     .breakStyle(offsetLevel: 8)
+    ///
+    /// // 应用于复杂视图
+    /// VStack {
+    ///     Text("Glitch")
+    ///     Image(systemName: "bolt.fill")
+    /// }
+    /// .breakStyle(offsetLevel: 3)
+    /// ```
+    ///
+    /// - Parameter offsetLevel: 故障效果的偏移级别，默认为 5
+    /// - Returns: 添加了破损效果的视图
+    public func breakStyle(offsetLevel: CGFloat = 5) -> some View {
+        modifier(BreakStyleModifier(offsetLevel: offsetLevel))
+    }
 }
