@@ -102,38 +102,39 @@ struct OnLoadingView: View {
 
         // 完成后更新状态
         await MainActor.run {
-            withAnimation {
-                isLoading = false
-            }
+            isLoading = false
         }
     }
 
     var body: some View {
         VStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(.thinMaterial)
+                .frame(width: 100, height: 100)
+                .ambilightStyle(
+                    contentShape: RoundedRectangle(cornerRadius: 20)
+                )
+                .overlay {
+                    Image(systemName: "person")
+                        .resizable().aspectRatio(contentMode: .fit).frame(
+                            width: 50, height: 50)
+                        .foregroundStyle(.white.opacity(0.2))
+                }
+                .shimmer(contentShape: RoundedRectangle(cornerRadius: 20))
+                .lightStroke(contentShape: RoundedRectangle(cornerRadius: 20))
+                
+
             Text(text.first!)
+
             Button("Switch Language") {
                 isLoading = true
             }
 
         }
-
-        
-
         //默认加载的版本
         .onLoading(isLoading: isLoading) {
             await task()
         }
-
-        //自定义 loading 视图版本
-        //        .onLoading(isLoading: isLoading) {
-        //            // 自定义加载视图
-        //            Text("友商是__")
-        //                .foregroundStyle(.white)
-        //
-        //        } perform: {
-        //            await task()
-        //        }
-
     }
 
 }

@@ -275,4 +275,124 @@ extension View {
             )
         )
     }
+
+    /// 添加浮动气泡效果
+    ///
+    /// 使用自定义配置数组创建浮动气泡效果。每个气泡可以独立配置大小、颜色、透明度和动画速度。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// // 基本用法
+    /// Text("Hello World")
+    ///     .bubbles([
+    ///         BubbleConfig(size: 20, color: .red, opacity: 0.5, speed: 1.0),
+    ///         BubbleConfig(size: 30, color: .blue, opacity: 0.4, speed: 1.2)
+    ///     ])
+    ///
+    /// // 创建彩虹气泡效果
+    /// Text("Rainbow Bubbles")
+    ///     .bubbles(
+    ///         (0..<10).map { i in
+    ///             BubbleConfig(
+    ///                 size: 25,
+    ///                 color: Color(hue: Double(i) / 10, saturation: 0.7, brightness: 0.9),
+    ///                 opacity: 0.5,
+    ///                 speed: 1.0
+    ///             )
+    ///         }
+    ///     )
+    ///
+    /// // 创建大小渐变的气泡
+    /// Text("Size Gradient")
+    ///     .bubbles(
+    ///         (0..<5).map { i in
+    ///             BubbleConfig(
+    ///                 size: CGFloat(10 + i * 5),
+    ///                 color: .blue,
+    ///                 opacity: 0.5,
+    ///                 speed: 1.0
+    ///             )
+    ///         }
+    ///     )
+    /// ```
+    ///
+    /// - Parameter configs: 气泡配置数组，每个配置定义一个气泡的属性
+    /// - Returns: 添加了浮动气泡效果的修改后的视图
+    public func bubbles(_ configs: [BubbleConfig]) -> some View {
+        modifier(BubblesModifier(configs: configs))
+    }
+
+    /// 添加浮动气泡效果（便捷方法）
+    ///
+    /// 使用简单的参数快速创建统一样式的浮动气泡效果。所有气泡将共享相同的颜色，
+    /// 但大小、透明度和速度会在指定范围内随机变化。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// // 基本用法（使用默认值）
+    /// Text("Default Bubbles")
+    ///     .bubbles()
+    ///
+    /// // 自定义气泡数量和颜色
+    /// Text("Custom Bubbles")
+    ///     .bubbles(
+    ///         count: 15,
+    ///         color: .purple
+    ///     )
+    ///
+    /// // 完全自定义
+    /// Text("Fully Custom")
+    ///     .bubbles(
+    ///         count: 20,
+    ///         color: .orange,
+    ///         size: 15...40
+    ///     )
+    ///
+    /// // 作为背景效果
+    /// VStack {
+    ///     Text("Title")
+    ///     Button("Press Me") {
+    ///         // 动作
+    ///     }
+    /// }
+    /// .frame(maxWidth: .infinity, maxHeight: .infinity)
+    /// .bubbles(
+    ///     count: 25,
+    ///     color: .blue.opacity(0.3),
+    ///     size: 20...50
+    /// )
+    ///
+    /// // 在列表中使用
+    /// List {
+    ///     ForEach(items) { item in
+    ///         Text(item.title)
+    ///     }
+    /// }
+    /// .bubbles(
+    ///     count: 10,
+    ///     color: .gray,
+    ///     size: 5...15
+    /// )
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - count: 气泡数量，默认为 10
+    ///   - color: 气泡颜色，默认为蓝色
+    ///   - size: 气泡大小范围，默认为 10...30 点
+    /// - Returns: 添加了浮动气泡效果的修改后的视图
+    public func bubbles(
+        count: Int = 10,
+        color: Color = .blue,
+        size: ClosedRange<CGFloat> = 10...30
+    ) -> some View {
+        let configs = (0..<count).map { _ in
+            BubbleConfig(
+                size: .random(in: size),
+                color: color,
+                opacity: .random(in: 0.3...0.7),
+                speed: .random(in: 0.8...1.2)
+            )
+        }
+        return bubbles(configs)
+    }
 }
