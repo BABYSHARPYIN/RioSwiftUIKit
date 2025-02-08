@@ -23,12 +23,13 @@ public struct BubbleConfig {
 // 单个气泡视图
 struct BubbleView: View {
     let config: BubbleConfig
-    @State private var isAnimating = false
+    let animate:Bool
     @State private var xOffset: CGFloat = 0
     @State private var yOffset: CGFloat = 0
 
-    init(config: BubbleConfig) {
+    init(config: BubbleConfig,animate:Bool) {
         self.config = config
+        self.animate = animate
     }
 
     var body: some View {
@@ -52,16 +53,18 @@ struct BubbleView: View {
                 )
                 .offset(x: xOffset, y: yOffset)
                 .onChange(of: xOffset) { _ in
-                    withAnimation(
-                        .easeInOut(duration: 2 * config.speed)
-                            .repeatForever(autoreverses: true)
-                    ) {
-                        xOffset = CGFloat.random(
-                            in: -size.width / 2 + config.size / 2...size.width
-                                / 2 - config.size / 2)
-                        yOffset = CGFloat.random(
-                            in: -size.height / 2 + config.size / 2...size.height
-                                / 2 - config.size / 2)
+                    if animate{
+                        withAnimation(
+                            .easeInOut(duration: 2 * config.speed)
+                                .repeatForever(autoreverses: true)
+                        ) {
+                            xOffset = CGFloat.random(
+                                in: -size.width / 2 + config.size / 2...size.width
+                                    / 2 - config.size / 2)
+                            yOffset = CGFloat.random(
+                                in: -size.height / 2 + config.size / 2...size.height
+                                    / 2 - config.size / 2)
+                        }
                     }
                 }
         }
@@ -72,8 +75,10 @@ struct BubbleView: View {
 // 气泡修饰符
 struct BubblesModifier: ViewModifier {
     let configs: [BubbleConfig]
-    public init(configs: [BubbleConfig]) {
+    let animate:Bool
+    public init(configs: [BubbleConfig],animate:Bool) {
         self.configs = configs
+        self.animate = animate
     }
     func body(content: Content) -> some View {
 
@@ -81,7 +86,7 @@ struct BubblesModifier: ViewModifier {
             .background {
                 ZStack {
                     ForEach(0..<configs.count, id: \.self) { index in
-                        BubbleView(config: configs[index])
+                        BubbleView(config: configs[index],animate: animate)
                     }
                 }
             }
@@ -101,8 +106,7 @@ struct BubblesExample: View {
                     .font(.title)
             }
             .frame(width: 200, height: 200)
-            .bubbles(count: 10)
-            .border(.black)
+            .bubbles(count: 12,animate: true)
             .tabItem {
                 Label("Basic", systemImage: "circle.fill")
             }

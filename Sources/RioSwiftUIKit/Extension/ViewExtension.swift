@@ -318,8 +318,10 @@ extension View {
     ///
     /// - Parameter configs: 气泡配置数组，每个配置定义一个气泡的属性
     /// - Returns: 添加了浮动气泡效果的修改后的视图
-    public func bubbles(_ configs: [BubbleConfig]) -> some View {
-        modifier(BubblesModifier(configs: configs))
+    public func bubbles(_ configs: [BubbleConfig], animate: Bool = false)
+        -> some View
+    {
+        modifier(BubblesModifier(configs: configs, animate: animate))
     }
 
     /// 添加浮动气泡效果（便捷方法）
@@ -383,7 +385,8 @@ extension View {
     public func bubbles(
         count: Int = 10,
         color: Color = .blue,
-        size: ClosedRange<CGFloat> = 10...30
+        size: ClosedRange<CGFloat> = 10...30,
+        animate: Bool = false
     ) -> some View {
         let configs = (0..<count).map { _ in
             BubbleConfig(
@@ -393,9 +396,9 @@ extension View {
                 speed: .random(in: 0.8...1.2)
             )
         }
-        return bubbles(configs)
+        return bubbles(configs, animate: animate)
     }
-    
+
     /// 添加破损风格效果
     ///
     /// 为视图添加故障艺术风格的视觉效果，包括色差和随机故障块。

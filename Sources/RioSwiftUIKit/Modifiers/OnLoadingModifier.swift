@@ -118,11 +118,11 @@ struct OnLoadingView: View {
                     Image(systemName: "person")
                         .resizable().aspectRatio(contentMode: .fit).frame(
                             width: 50, height: 50)
-                        .foregroundStyle(.white.opacity(0.2))
+                        .foregroundStyle(.white.opacity(0.5))
                 }
                 .shimmer(contentShape: RoundedRectangle(cornerRadius: 20))
                 .lightStroke(contentShape: RoundedRectangle(cornerRadius: 20))
-                
+//                .breakStyle(offsetLevel: 10)
 
             Text(text.first!)
 
