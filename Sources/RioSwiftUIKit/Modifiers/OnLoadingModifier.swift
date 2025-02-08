@@ -92,9 +92,9 @@ public struct OnLoadingModifier: ViewModifier {
 }
 
 // 使用示例
-struct ContentView: View {
+struct OnLoadingView: View {
     @State private var isLoading = false
-    @State private var text = ["Hello, World!","你好,世界!"]
+    @State private var text = ["Hello, World!", "你好,世界!"]
     private func task() async {
         // 模拟异步任务
         try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2秒
@@ -111,15 +111,19 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text(text.first!)
-
             Button("Switch Language") {
                 isLoading = true
             }
+
         }
+
+        
+
         //默认加载的版本
-        .onLoading(isLoading: isLoading, loadingText: "loading...") {
+        .onLoading(isLoading: isLoading) {
             await task()
         }
+
         //自定义 loading 视图版本
         //        .onLoading(isLoading: isLoading) {
         //            // 自定义加载视图
@@ -135,5 +139,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    OnLoadingView()
 }

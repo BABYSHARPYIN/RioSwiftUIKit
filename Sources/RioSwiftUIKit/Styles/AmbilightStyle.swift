@@ -83,7 +83,7 @@ struct AmbilightStyle: View {
             .ambilightStyle(
                 contentShape: RoundedRectangle(
                     cornerRadius: 20, style: .continuous),
-                blur: 40,
+                blur: 30,
                 animate: true
             )
     }

@@ -103,7 +103,7 @@ extension View {
         contentShape: S,
         colors: [Color]? = nil,
         blur: CGFloat? = nil,
-        animate: Bool? = nil,
+        animate: Bool? = true,
         animateDuration: CGFloat? = nil,
         colorRotation: CGFloat? = nil
     ) -> some View {

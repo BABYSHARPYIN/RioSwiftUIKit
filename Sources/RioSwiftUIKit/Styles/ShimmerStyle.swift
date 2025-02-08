@@ -38,12 +38,12 @@ public struct ShimmerModifier<S: Shape>: ViewModifier {
                             ],
                             startPoint: .topLeading, endPoint: .bottomTrailing
                         )
-                        .blur(radius: 5)
+                        .blur(radius: 10)
                         .offset(x: offset)
                         .onAppear {
                             offset = -size.width
                             withAnimation(
-                                .linear(duration: 1.25).delay(2.0)
+                                .linear(duration: 1.25).delay(4.0)
                                     .repeatForever(
                                         autoreverses: false)
                             ) {
