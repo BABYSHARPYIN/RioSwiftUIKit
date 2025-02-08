@@ -123,12 +123,13 @@ struct OnLoadingView: View {
                 .shimmer(contentShape: RoundedRectangle(cornerRadius: 20))
                 .lightStroke(contentShape: RoundedRectangle(cornerRadius: 20))
 //                .breakStyle(offsetLevel: 10)
+                
 
             Text(text.first!)
 
             Button("Switch Language") {
                 isLoading = true
-            }
+            }.readable()
 
         }
         //默认加载的版本
