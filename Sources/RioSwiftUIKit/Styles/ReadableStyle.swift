@@ -70,19 +70,36 @@ struct ReadableViewDemo: View {
     }
 }
 
-// 深色模式预览
-struct DarkModeDemo: View {
-    var body: some View {
-        ReadableViewDemo()
-            .preferredColorScheme(.dark)
+
+extension View{
+    /// 为视图添加可读性增强效果
+    ///
+    /// 自动适应深色/浅色模式，为内容添加适当的背景效果使其更易读。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// // 基本用法
+    /// Text("Hello World")
+    ///     .readable()
+    ///
+    /// // 自定义配置
+    /// Text("Custom Style")
+    ///     .readable(
+    ///         gradientOpacity: 0.2,
+    ///         padding: 12,
+    ///         cornerRadius: 10
+    ///     )
+    /// ```
+    ///
+    /// - Returns: 添加了可读性增强效果的视图
+    public func readable() -> some View {
+        modifier(
+            ReadableViewModifier()
+        )
     }
 }
 
 // 预览
-#Preview("Light Mode") {
+#Preview {
     ReadableViewDemo()
-}
-
-#Preview("Dark Mode") {
-    DarkModeDemo()
 }

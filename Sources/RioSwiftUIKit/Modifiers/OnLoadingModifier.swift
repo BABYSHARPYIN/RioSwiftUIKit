@@ -7,6 +7,52 @@
 
 import SwiftUI
 
+// 使用示例
+struct OnLoadingView: View {
+    @State private var isLoading = false
+    @State private var text = ["Hello, World!", "你好,世界!"]
+    private func task() async {
+        // 模拟异步任务
+        try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2秒
+        text.reverse()
+
+        // 完成后更新状态
+        await MainActor.run {
+            isLoading = false
+        }
+    }
+
+    var body: some View {
+        VStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(.thinMaterial)
+                .frame(width: 100, height: 100)
+                .ambilightStyle(
+                    contentShape: RoundedRectangle(cornerRadius: 20)
+                )
+                .overlay {
+                    Image(systemName: "person")
+                        .resizable().aspectRatio(contentMode: .fit).frame(
+                            width: 50, height: 50
+                        )
+                        .foregroundStyle(.white.opacity(0.5))
+                }
+                .shimmer(contentShape: RoundedRectangle(cornerRadius: 20))
+
+            Text(text.first!)
+
+            Button("Switch Language") {
+                isLoading = true
+            }
+        }
+        //默认加载的版本
+        .onLoading(isLoading: isLoading) {
+            await task()
+        }
+    }
+
+}
+
 // 定义 Loading 视图修饰符
 public struct OnLoadingModifier: ViewModifier {
     // loading 状态
@@ -91,53 +137,87 @@ public struct OnLoadingModifier: ViewModifier {
     }
 }
 
-// 使用示例
-struct OnLoadingView: View {
-    @State private var isLoading = false
-    @State private var text = ["Hello, World!", "你好,世界!"]
-    private func task() async {
-        // 模拟异步任务
-        try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2秒
-        text.reverse()
-
-        // 完成后更新状态
-        await MainActor.run {
-            isLoading = false
-        }
+extension View {
+    /// 为视图添加加载状态和加载指示器
+    ///
+    /// 使用默认加载指示器样式，可自定义加载文本。当加载状态激活时，会显示一个半透明遮罩层和加载指示器，
+    /// 并在后台执行指定的异步任务。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Button("Load Data") {
+    ///     isLoading = true
+    /// }
+    /// .onLoading(isLoading: isLoading, loadingText: "加载中...") {
+    ///     await loadDataTask()
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - isLoading: 控制加载状态的布尔值
+    ///   - loadingText: 加载过程中显示的文本，默认为 "Loading..."
+    ///   - task: 在加载状态下执行的异步任务
+    /// - Returns: 添加了加载效果的修改后的视图
+    @inlinable
+    public func onLoading(
+        isLoading: Bool,
+        loadingText: String = "Loading...",
+        perform task: @escaping () async -> Void
+    ) -> some View {
+        modifier(
+            OnLoadingModifier(
+                isLoading: isLoading,
+                loadingText: loadingText,
+                task: task,
+                loadingView: nil
+            )
+        )
     }
 
-    var body: some View {
-        VStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.thinMaterial)
-                .frame(width: 100, height: 100)
-                .ambilightStyle(
-                    contentShape: RoundedRectangle(cornerRadius: 20)
-                )
-                .overlay {
-                    Image(systemName: "person")
-                        .resizable().aspectRatio(contentMode: .fit).frame(
-                            width: 50, height: 50)
-                        .foregroundStyle(.white.opacity(0.5))
+    /// 为视图添加加载状态和自定义加载指示器
+    ///
+    /// 允许使用自定义视图作为加载指示器。当加载状态激活时，会显示一个半透明遮罩层和自定义的加载视图，
+    /// 并在后台执行指定的异步任务。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Button("Load Data") {
+    ///     isLoading = true
+    /// }
+    /// .onLoading(isLoading: isLoading) {
+    ///     // 自定义加载视图
+    ///     VStack {
+    ///         Image(systemName: "arrow.triangle.2.circlepath")
+    ///             .font(.largeTitle)
+    ///         Text("Processing...")
+    ///     }
+    /// } perform: {
+    ///     await loadDataTask()
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - isLoading: 控制加载状态的布尔值
+    ///   - loadingView: 自定义加载视图的视图构建器
+    ///   - task: 在加载状态下执行的异步任务
+    /// - Returns: 添加了自定义加载效果的修改后的视图
+    @inlinable
+    public func onLoading<LoadingView: View>(
+        isLoading: Bool,
+        @ViewBuilder loadingView: @escaping () -> LoadingView,
+        perform task: @escaping () async -> Void
+    ) -> some View {
+        modifier(
+            OnLoadingModifier(
+                isLoading: isLoading,
+                loadingText: "",
+                task: task,
+                loadingView: {
+                    AnyView(loadingView())
                 }
-                .shimmer(contentShape: RoundedRectangle(cornerRadius: 20))
-                .lightStroke(contentShape: RoundedRectangle(cornerRadius: 20))
-//                .breakStyle(offsetLevel: 10)
-                
-
-            Text(text.first!)
-
-            Button("Switch Language") {
-                isLoading = true
-            }.readable()
-
-        }
-        //默认加载的版本
-        .onLoading(isLoading: isLoading) {
-            await task()
-        }
+            )
+        )
     }
-
 }
 
 #Preview {

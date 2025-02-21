@@ -83,6 +83,54 @@ struct ShimmerStyle: View {
     }
 }
 
+extension View{
+    /// 为视图添加光泽扫过动画效果
+    ///
+    /// 此修饰符创建一个从左到右扫过的光泽动画效果，类似于加载或强调状态的视觉反馈。
+    /// 光泽效果会按照指定的形状进行裁剪，并可以通过 animate 参数控制开启或关闭。
+    ///
+    /// Example usage:
+    /// ```swift
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .fill(.blue)
+    ///     .frame(width: 200, height: 100)
+    ///     .shimmer(contentShape: RoundedRectangle(cornerRadius: 12))
+    /// ```
+    ///
+    /// 或者控制动画状态:
+    /// ```swift
+    /// @State private var isShimmering = true
+    ///
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .fill(.blue)
+    ///     .frame(width: 200, height: 100)
+    ///     .shimmer(
+    ///         contentShape: RoundedRectangle(cornerRadius: 12),
+    ///         animate: isShimmering
+    ///     )
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - contentShape: 定义光泽效果的形状。该形状将被用作裁剪遮罩
+    ///   - animate: 控制动画是否激活,默认为 true
+    ///   - color: 光泽颜色,默认为白色
+    /// - Returns: 应用了光泽效果的修改后的视图
+    @inlinable
+    public func shimmer<S: Shape>(
+        contentShape: S,
+        animate: Bool = true,
+        color: Color = Color.white
+    ) -> some View {
+        modifier(
+            ShimmerModifier(
+                contentShape: contentShape,
+                animate: animate,
+                color: color
+            )
+        )
+    }
+}
+
 #Preview {
     ShimmerStyle()
 }

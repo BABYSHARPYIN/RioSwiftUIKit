@@ -89,6 +89,52 @@ struct AmbilightStyle: View {
     }
 }
 
+extension View{
+    /// 添加环形光效果
+    ///
+    /// Example usage:
+    /// ```swift
+    /// RoundedRectangle(cornerRadius: 12)
+    ///     .fill(.blue)
+    ///     .frame(width: 200, height: 100)
+    ///     .ambilightStyle(
+    ///         contentShape: RoundedRectangle(cornerRadius: 12),
+    ///         colors: [.red, .blue, .green],
+    ///         blur: 20,
+    ///         animate: true,
+    ///         animateDuration: 2
+    ///     )
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - contentShape: 光效形状
+    ///   - colors: 自定义颜色数组（可选）
+    ///   - blur: 模糊程度（可选）
+    ///   - animate: 是否开启动画（可选）
+    ///   - animateDuration: 动画周期（可选）
+    /// - Returns: 修改后的视图
+    @inlinable
+    public func ambilightStyle<S: Shape>(
+        contentShape: S,
+        colors: [Color]? = nil,
+        blur: CGFloat? = nil,
+        animate: Bool? = true,
+        animateDuration: CGFloat? = nil,
+        colorRotation: CGFloat? = nil
+    ) -> some View {
+        modifier(
+            AmbilightStyleModifier(
+                contentShape: contentShape,
+                colors: colors,
+                blur: blur,
+                animate: animate,
+                animateDuration: animateDuration,
+                colorRotation: colorRotation
+            )
+        )
+    }
+}
+
 #Preview {
     AmbilightStyle()
 }

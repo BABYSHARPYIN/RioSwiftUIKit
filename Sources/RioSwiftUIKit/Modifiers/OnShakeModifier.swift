@@ -62,6 +62,38 @@ struct OnShakeModifierView: View {
     }
 }
 
+extension View {
+    /// 添加抖动效果
+    ///
+    /// Example usage:
+    /// ```swift
+    /// Text("Shake me!")
+    ///     .onShake(amplitude: 5) {
+    ///         print("View was shaken!")
+    ///     }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - amplitude: 抖动幅度
+    ///   - anchor: 抖动锚点
+    ///   - action: 抖动触发时执行的动作
+    /// - Returns: 添加了抖动效果的视图
+    @inlinable
+    public func onShake(
+        amplitude: CGFloat? = nil,
+        anchor: UnitPoint? = nil,
+        action: @escaping () -> Void
+    ) -> some View {
+        modifier(
+            OnShakeModifier(
+                amplitude: amplitude,
+                anchor: anchor,
+                action: action
+            )
+        )
+    }
+}
+
 #Preview {
     OnShakeModifierView()
 }
