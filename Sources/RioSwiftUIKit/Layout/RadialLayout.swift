@@ -7,6 +7,8 @@
 import SwiftUI
 
 public struct RadialLayout: Layout {
+    public init() {}
+    
     public func sizeThatFits(
         proposal: ProposedViewSize,
         subviews: Subviews,
