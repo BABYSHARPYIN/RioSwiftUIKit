@@ -13,6 +13,13 @@ public struct PermissionRequestView: View {
     let message: String
     let buttonTitle: String
     let action: () -> Void
+    public init(icon: String, title: String, message: String, buttonTitle: String, action: @escaping () -> Void) {
+        self.icon = icon
+        self.title = title
+        self.message = message
+        self.buttonTitle = buttonTitle
+        self.action = action
+    }
     
     public var body: some View {
         VStack(spacing: 20) {
