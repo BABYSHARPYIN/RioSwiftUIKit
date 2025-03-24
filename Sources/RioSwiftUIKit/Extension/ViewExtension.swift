@@ -37,4 +37,38 @@ extension View {
             }
         }
     }
+
+    /// 获取设备的安全区域边距值
+    ///
+    /// 这个属性用于获取当前设备的安全区域插入值，适用于不同iOS版本：
+    /// - 在 iOS 15 及以上版本，使用 UIWindowScene API
+    /// - 在 iOS 15 以下版本，使用 UIApplication.windows API
+    ///
+    /// 安全区域通常用于：
+    /// - 避免内容被刘海屏、Home Indicator等系统UI遮挡
+    /// - 确保视图内容在可视区域内正确显示
+    /// - 适配不同设备的屏幕布局
+    ///
+    /// - Returns: UIEdgeInsets 包含以下值：
+    ///   - top: 顶部安全区域高度
+    ///   - bottom: 底部安全区域高度
+    ///   - left: 左侧安全区域宽度
+    ///   - right: 右侧安全区域宽度
+    ///
+    /// - Note: 如果无法获取安全区域值（例如在App启动初期），将返回 .zero
+    ///
+    /// 使用示例:
+    /// ```
+    /// let topPadding = safeAreaInsets.top
+    /// let bottomPadding = safeAreaInsets.bottom
+    /// ```
+    var safeAreaInsets: UIEdgeInsets {
+        if #available(iOS 15.0, *) {
+            let scene =
+                UIApplication.shared.connectedScenes.first as? UIWindowScene
+            return scene?.windows.first?.safeAreaInsets ?? .zero
+        } else {
+            return UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
+        }
+    }
 }

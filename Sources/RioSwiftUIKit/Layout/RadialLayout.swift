@@ -74,24 +74,33 @@ struct RadialLayout: Layout {
     }
 }
 
-struct Demo:View {
-    @State var count:Int = 12
-    var body: some View{
-        RadialLayout {
-            ForEach(0..<count, id: \.self) { i in
-                Text("\(i)")
+struct Demo: View {
+    @State var count: Int = 12
+    let text: String = "世界和平"
+    var body: some View {
+        VStack {
+            RadialLayout {
+                ForEach(0..<count, id: \.self) { i in
+                    Text("\(i)")
+                }
             }
-        }
-        .frame(width: 300, height: 300)
-        .border(.black)
-        .onTapGesture {
-            withAnimation {
-                count+=1
+            .frame(width: 300, height: 300)
+            .onTapGesture {
+                withAnimation {
+                    count += 1
+                }
             }
+
+            RadialLayout {
+                ForEach(Array(text), id: \.self) { char in
+                    Text(String(char))
+                }
+            }
+            .frame(width: 300, height: 300)
         }
     }
 }
 
-#Preview{
+#Preview {
     Demo()
 }
