@@ -6,8 +6,8 @@
 //
 import SwiftUI
 
-struct RadialLayout: Layout {
-    func sizeThatFits(
+public struct RadialLayout: Layout {
+    public func sizeThatFits(
         proposal: ProposedViewSize,
         subviews: Subviews,
         cache: inout ()
@@ -15,7 +15,7 @@ struct RadialLayout: Layout {
         proposal.replacingUnspecifiedDimensions()
     }
 
-    func placeSubviews(
+    public func placeSubviews(
         in bounds: CGRect,
         proposal: ProposedViewSize,
         subviews: Subviews,

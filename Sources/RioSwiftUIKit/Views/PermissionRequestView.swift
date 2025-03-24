@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct PermissionRequestView: View {
+public struct PermissionRequestView: View {
     let icon: String
     let title: String
     let message: String
     let buttonTitle: String
     let action: () -> Void
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 20) {
             Image(systemName: icon)
                 .font(.system(size: 50))
