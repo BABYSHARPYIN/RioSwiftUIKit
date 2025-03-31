@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-extension View {
+public extension View {
     /// 创建一个反向遮罩效果，将遮罩视图的非透明部分变为透明
     ///
     /// Example usage:

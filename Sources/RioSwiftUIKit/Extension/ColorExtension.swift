@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-extension Color {
+public extension Color {
     /// 使用十六进制字符串创建颜色
     /// - Parameter hex: 十六进制颜色字符串，支持以下格式：
     ///   - RGB: 3位十六进制值 (例如: "FFF")
